@@ -1,0 +1,158 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #009bd3;
+}
+
+#app {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(10, 10%);
+  grid-template-rows: repeat(10, 10%);
+  height: 100vh;
+  width: 100vw;
+}
+
+nav {
+  background-color: black;
+  grid-column: 1 / 11;
+  grid-row: 1;
+}
+
+.nav {
+  grid-column: 3 / 9;
+  color: white;
+  font-family: sans-serif;
+  font-size: 1.5em;
+}
+
+.nav li {
+  padding-left: 1em;
+  padding-right: 1em;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+}
+
+.container {
+  height: 100vh;
+  padding: 2.5em;
+  grid-column: 3 / 9;
+  grid-row: 2 / 6;
+  background-color: white;
+  font-family: sans-serif;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+}
+
+form {
+  padding: 1em;
+  display: inline-block;
+}
+
+.form-group {
+  padding: .5em;
+  text-align: right;
+}
+
+.form-group input{
+  border: 1px, solid, black;
+  border-radius: 4px;
+  padding: .3em;
+}
+
+button {
+  background-color: #59a2cc;
+  border: none;
+  color: white;
+  text-decoration: none;
+  padding: 1em;
+  cursor: pointer;
+}
+
+.wall {
+  border: 2px solid #ff5d4f;
+  max-width: 300px;
+}
+
+.wall h3{
+  margin: .5em;
+}
+
+.wall p {
+  margin: .5em;
+}
+
+.wall a {
+  text-decoration: none;
+  color: #ff5d4f;
+}
+
+.wall a:hover {
+  text-decoration: underline;
+  color: #009bd3;
+}
+
+.wall-header{
+  max-height: 350px;
+  max-width: 300px;
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 768px) {
+    nav {
+      background-color: black;
+      grid-column: 1 / 11;
+      grid-row: 1;
+    }
+
+    .nav {
+      grid-column: 3 / 9;
+      color: white;
+      font-family: sans-serif;
+      font-size: 1em;
+    }
+
+    .nav li {
+      padding-left: 1em;
+      padding-right: 1em;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .nav a {
+      color: white;
+      text-decoration: none;
+    }
+    /* For mobile phones: */
+    .container {
+      grid-column: 1 / 11;
+      grid-row: 2 / 11;
+    }
+
+    form {
+      padding: 1em;
+      display: inline-block;
+    }
+
+    .form-group {
+      padding: .5em;
+      width: 100%;
+      display: inline-block;
+      text-align: left;
+    }
+
+    .form-group input{
+      border: 1px, solid, black;
+      border-radius: 4px;
+      padding: .3em;
+    }
+}
