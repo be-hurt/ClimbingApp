@@ -11,8 +11,11 @@ class WallDetail extends Component {
 
     this.state = {
       errors: {},
-      //successMessage,
-      data: []
+      commentData: {
+        comment: '',
+        name: ''
+      },
+      data: {}
     }
 
     this.processForm = this.processForm.bind(this);
@@ -37,6 +40,7 @@ class WallDetail extends Component {
       let myRating = document.getElementById("rating");
       let star = document.createElement("SPAN");
       star.setAttribute("class", "glyphicon glyphicon-star");
+      //this is triggering with every change in the page as it is being re-rendered
       myRating.appendChild(star);
     }
 
@@ -44,16 +48,24 @@ class WallDetail extends Component {
       let myRating = document.getElementById("rating");
       let star = document.createElement("SPAN");
       star.setAttribute("class", "glyphicon glyphicon-star-empty");
+      //this is triggering with every change in the page as it is being re-rendered
       myRating.appendChild(star);
     }
   }
 
-  //check to see if there are any comment. If so, return the commentList component
+  //check to see if there are any comments. If so, return the commentList component
   checkComments() {
-    if(this.state.data.comments) {
-      return (<CommentList data={this.state.data.comments}/>);
-    } else {
-      return (<p>There are no comments to diplay at this time.</p>);
+    if(this.state.data.length) {
+      if(this.state.data.comments.length !== 0) {
+        return (
+          <CommentList data={this.state.data.comments}/>
+        );
+      } else {
+        console.log(this.state.data.comments);
+        return (
+          <p>There are no comments to diplay at this time.</p>
+        );
+      }
     }
   }
 
@@ -76,9 +88,9 @@ class WallDetail extends Component {
         <CommentForm 
           onSubmit={this.processForm}
           onChange={this.commentChange}
-          successMessage={this.successMessage}
+          //successMessage={this.successMessage}
           errors={this.state.errors}
-          commentData={this.state.data.comments}
+          commentData={this.state.commentData}
         />
       );
     } else {
@@ -92,20 +104,60 @@ class WallDetail extends Component {
 
   //add changes to the commentForm to the state
   commentChange(event) {
-    /*const field = event.target.name;
-    const comment = this.state.commentData;
+    const field = event.target.name;
+    const commentData = this.state.commentData;
     commentData[field] = event.target.value;
     this.setState({
       commentData
-    });*/
+    });
   }
 
   //process the commentform
-  processForm() {
+  processForm(e) {
+    e.preventDefault();
+
+    //create a string for our HTTP body message
+    //need to get the current userid
+    const name = localStorage.getItem('username');
+    const comment = this.state.commentData.comment;
+    const formData = `name=${name}&comment=${comment}`;
+    const id = this.props.match.params.wall_id;
+
+    //Create an AJAX request
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `http://localhost:3001/api/walls/${id}/comments`);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.responseType = 'json';
+    xhr.addEventListener('load', () => {
+      if (xhr.status === 200) {
+        // success
+        // change the component-container state
+        this.setState({
+          errors: {}
+        });
+
+        //reset the state
+        this.setState({ commentData: {comment: '', name: ''}});
+      } else {
+        // failure  
+       // change the component state
+        const errors = xhr.response.errors ? xhr.response.errors : {};
+        errors.summary = xhr.response.message;
+
+        this.setState({
+          errors
+        });
+
+        console.log(this.state.errors);
+        console.log(xhr.response);
+      }
+    });
+    xhr.send(formData);
   }
 
   componentDidMount() {
     this.getWallData();
+    //add a function to get the current user
   }
 
   render() {
@@ -113,10 +165,10 @@ class WallDetail extends Component {
     return (
       <div>
         <h1>{this.state.data.name}</h1>
-        <img src={`/data/${this.state.data.image}`} alt={`Detailed view of ${this.state.data.name} climbing route.`}/>
+        <img className='wall-detail' src={`/data/${this.state.data.image}`} alt={`Detailed view of ${this.state.data.name} climbing route.`}/>
         <p>Added: {this.state.data.date}</p>
         <p>Difficulty: {this.state.data.difficulty}</p>
-        <p id="rating">Rating: {this.state.data.rating}</p>
+        <p id="rating">Rating: { this.ratingDisplay() }</p>
         <p>Description: {this.state.data.description}</p>
         { this.checkComments() }
         { this.checkLogin() }

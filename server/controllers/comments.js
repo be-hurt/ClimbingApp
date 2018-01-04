@@ -51,12 +51,15 @@ module.exports.createComment = function(req, res) {
 const addComment = function(req, res, wall) {
 	if(!wall) {
 		sendJsonResponse(res, 404, {'message': 'wallid not found'});
-	}
-	else {
+	} else if(!req.body.name) {
+		sendJsonResponse(res, 401, {'message': 'You must be logged in to post a comment. Please login and try again.'});
+	} else if(req.body.comment.trim().length === 0) {
+		sendJsonResponse(res, 400, {'message': 'The comment field must not be empty.'});
+	}else {
 		wall.comments.push({
-			author: req.body.author,
+			author: req.body.name,
 			date: new Date(),
-			text: req.body.text
+			text: req.body.comment
 		});
 		wall.save(function(err, wall) {
 			let thisComment;

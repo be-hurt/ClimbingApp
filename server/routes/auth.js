@@ -9,6 +9,11 @@ function validateSignupForm(payload) {
 	let isFormValid = true;
 	let message = '';
 
+	if (!payload || typeof payload.username !== 'string' || payload.username.trim().length === 0) {
+		isFormValid = false;
+		err.name = 'Please provide a username';
+	}
+
 	if (!payload || typeof payload.email !== 'string' || !validator.isEmail(payload.email)) {
 		isFormValid = false;
 		err.email = 'Please provide a valid email address';
@@ -17,11 +22,6 @@ function validateSignupForm(payload) {
 	if(!payload || typeof payload.password !== 'string' || payload.password.trim().length < 6) {
 		isFormValid = false;
 		err.password = 'Password must contain at least 6 characters';
-	}
-
-	if (!payload || typeof payload.name !== 'string' || payload.name.trim().length === 0) {
-		isFormValid = false;
-		err.name = 'Please provide a username';
 	}
 
 	if (!isFormValid) {
@@ -60,31 +60,6 @@ function validateLoginForm(payload) {
 		success: isFormValid,
 		message,
 		errors
-	};
-}
-
-function validateCommentForm(payload) {
-	const err = {};
-	let isFormValid = true;
-	let message = '';
-
-	//note that in the commentform, will have to get the username from the logged in users credentials automatically
-	if (!payload || typeof payload.user !== 'string' || payload.user.trim().length === 0) {
-		isFormValid = false;
-		err.user = "Error. You must be logged in to post a comment";
-	}
-
-	//no need to check for date, as that will be generated when the submission goes through
-	//check if a comment exists
-	if (!payload || typeof payload.text !== 'string' || !payload.comment.trim().length === 0) {
-		isFormValid = false;
-		err.text = "Please enter your comment";
-	}
-
-	return {
-		success: isFormValid,
-		message,
-		err
 	};
 }
 

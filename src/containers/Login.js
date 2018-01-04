@@ -66,14 +66,13 @@ class Login extends Component {
         });
 
         // save the token
-        Auth.authenticateUser(xhr.response.token);
+        Auth.authenticateUser(xhr.response.token, username);
 
         //reset the state
         this.setState({ user_login: {login_name: '', login_password: ''}});
 
         // change the current URL to /
         this.props.history.push("/account");
-        console.log('Login successful!');
       } else {
         // failure  
        // change the component state

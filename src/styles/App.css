@@ -41,11 +41,18 @@ nav {
 
 .container {
   height: 100%;
-  padding: 2.5em;
+  padding: 3em;
   grid-column: 3 / 9;
   grid-row: 2 / 6;
   background-color: white;
   font-family: sans-serif;
+}
+
+.success-message {
+  color: #009bd3;
+  font-weight: bold;
+  display: block;
+  margin: 1em;
 }
 
 .error-message {
@@ -70,7 +77,7 @@ form {
 }
 
 button {
-  background-color: #59a2cc;
+  background-color: #009bd3;
   border: none;
   color: white;
   text-decoration: none;
@@ -101,58 +108,113 @@ button {
   color: #009bd3;
 }
 
-.wall-header{
+.wall-header {
   max-height: 350px;
   max-width: 300px;
   overflow: hidden;
 }
 
+.wall-detail {
+  max-width: 100%;
+  border: 2px solid #ff5d4f;
+}
+
+.glyphicon {
+  position: relative;
+  display: inline-block;
+  margin: .3em;
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.glyphicon-star {
+  background-image: url("../resources/glyphicons/star.png");
+  background-repeat: no-repeat;
+}
+
+.glyphicon-star-empty {
+  background-image: url("../resources/glyphicons/star-empty.png");
+  background-repeat: no-repeat;
+}
+
 @media only screen and (max-width: 768px) {
-    nav {
-      background-color: black;
-      grid-column: 1 / 11;
-      grid-row: 1;
-    }
+  nav {
+    background-color: black;
+    grid-column: 1 / 11;
+    grid-row: 1;
+  }
 
-    .nav {
-      grid-column: 3 / 9;
-      color: white;
-      font-family: sans-serif;
-      font-size: 1em;
-    }
+  .nav {
+    grid-column: 3 / 9;
+    color: white;
+    font-family: sans-serif;
+    font-size: 1em;
+  }
 
-    .nav li {
-      padding-left: 1em;
-      padding-right: 1em;
-      text-decoration: none;
-      display: inline-block;
-    }
+  .nav li {
+    padding-left: 1em;
+    padding-right: 1em;
+    text-decoration: none;
+    display: inline-block;
+  }
 
-    .nav a {
-      color: white;
-      text-decoration: none;
-    }
-    /* For mobile phones: */
-    .container {
-      grid-column: 1 / 11;
-      grid-row: 2 / 11;
-    }
+  .nav a {
+    color: white;
+    text-decoration: none;
+  }
+  /* For mobile phones: */
+  .container {
+    grid-column: 1 / 11;
+    grid-row: 2 / 11;
+    padding: 1.5em;
+  }
 
-    form {
-      padding: 1em;
-      display: inline-block;
-    }
+  .wall-header {
+    max-height: 200px;
+    max-width: 300px;
+    overflow: hidden;
+  }
 
-    .form-group {
-      padding: .5em;
-      width: 100%;
-      display: inline-block;
-      text-align: left;
-    }
+  .wall-detail {
+  max-width: 100%;
+  border: 2px solid #ff5d4f;
+  }
 
-    .form-group input{
-      border: 1px, solid, black;
-      border-radius: 4px;
-      padding: .3em;
-    }
+  form {
+    padding: 1em;
+    display: inline-block;
+  }
+
+  .form-group {
+    padding: .5em;
+    width: 100%;
+    display: inline-block;
+    text-align: left;
+  }
+
+  .form-group input{
+    border: 1px, solid, black;
+    border-radius: 4px;
+    padding: .3em;
+  }
+
+  .glyphicon {
+    position: relative;
+    display: inline-block;
+    margin: .3em;
+    height: 1.2em;
+    width: 1.2em;
+  }
+
+  .glyphicon-star {
+    background-image: url("../resources/glyphicons/star.png");
+    background-repeat: no-repeat;
+    background-size: 1.2em;
+  }
+
+  .glyphicon-star-empty {
+    background-image: url("../resources/glyphicons/star-empty.png");
+    background-repeat: no-repeat;
+    background-size: 1.2em;
+  }
 }

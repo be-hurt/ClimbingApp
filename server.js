@@ -67,36 +67,6 @@ router.get('/', function(req, res) {
 	res.json({ message: 'API Initialized!'});
 })
 
-//adding a users route to our /api router
-router.route('/users') 
-
-	//retrieve all users from the database
-	.get(function(req, res) {
- 		//looks at our Users Schema
-		User.find(function(err, users) {
-			if (err) 
-				res.send(err);
-	 		//responds with a json object of all users.
-	 		res.json(users)
-	 	});
- 	});
-
-	//Create a new User and add to the database
-	/*.post(function(req, res) {
-		var user = new User();
- 		//body parser lets us use the req.body
- 		user.username = req.body.name;
- 		user.email = req.body.email;
- 		user.password = req.body.password;
- 
-		user.save(function(err) {
- 			if (err) {
- 				res.send(err);
- 			}
- 			res.json({ message: 'User registration successful. Welcome to Rocks!' });
- 		});
-	});*/
-
 //use our router configuration when we call /api
 app.use('/api', router);
 app.use('/api', routesApi);

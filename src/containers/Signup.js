@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import SignUpForm from '../components/SignupForm';
 
 
@@ -11,7 +10,7 @@ class Signup extends Component {
     // set the initial component state
     this.state = {
       err: {},
-      successMessage: '',
+      message: '',
       user_signup: {
         name: '',
         email: '',
@@ -20,8 +19,8 @@ class Signup extends Component {
     };
 
     //this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.changeUser = this.changeUser.bind(this);
+    this.processForm = this.processForm.bind(this);
   }
 
   changeUser(event) {
@@ -34,51 +33,64 @@ class Signup extends Component {
     });
   }
 
-  handleSubmit(e) {
-    // prevent default action. in this case, action is the form submission event
+  processForm(e) {
+   // prevent default action. in this case, action is the form submission event
     e.preventDefault();
-    let name = this.state.user_signup.name.trim();
-    let email = this.state.user_signup.email.trim();
-    let password = this.state.user_signup.password.trim();
 
-    if (!name || !email || !password) {
-      
-      return;
-    }
-    this.handleUserSubmit({name: name, email: email, password: password});
-    this.setState({ user_signup: {name: '', email: '', password: ''}});
-    }
+    // create a string for an HTTP body message
+    const name = encodeURIComponent(this.state.user_signup.name);
+    const email = encodeURIComponent(this.state.user_signup.email);
+    const password = encodeURIComponent(this.state.user_signup.password);
+    const formData = `username=${name}&email=${email}&password=${password}`;
 
-  handleUserSubmit(user) {
-    axios.post('http://localhost:3001/auth/signup', user)
-      .then(function (response) {
-        //success!
-        console.log(response);
+    // create an AJAX request
+    const xhr = new XMLHttpRequest();
+    xhr.open('post', 'http://localhost:3001/auth/signup');
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.responseType = 'json';
+    xhr.addEventListener('load', () => {
+      if (xhr.status === 200) {
+        // success
+        //not posting?
+        const message = xhr.response.message;
+
+        console.log('signup SHOULD be successful.');
+        // change the component-container state
         this.setState({
           err: {},
-          successMessage: 'Registration successful. Welcome to Rocks!'
+          message
         });
 
-        localStorage.setItem('successMessage');
+        //reset the state
+        this.setState({ user_signup: {name: '', email: '', password: ''}});
+      } else {
+        // failure  
+       // change the component state
+        const err = xhr.response.errors ? xhr.response.errors : {};
+        err.summary = xhr.response.message;
+        err.name = xhr.response.err.name;
+        err.email = xhr.response.err.email;
+        err.password = xhr.response.err.password;
 
-        // change the current URL to /
-        this.context.router.replace('/login');
-      })
-      .catch(function (error) {
-        //failure
-        console.log(error);
-      });
+        this.setState({
+          err
+        });
+
+        console.log(xhr.response);
+      }
+    });
+    xhr.send(formData);
   }
 
   // Render the component.//
   render() {
     return (
       <SignUpForm
-        onSubmit={this.handleSubmit}
+        onSubmit={this.processForm}
         onChange={this.changeUser}
         err={this.state.err}
         user_signup={this.state.user_signup}
-        successMessage={this.state.successMessage}
+        message={this.state.message}
       />
     );
   }
