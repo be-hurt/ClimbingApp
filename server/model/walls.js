@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const CommentSchema = new mongoose.Schema({
 	author: {type: String, required: true},
+	authorId: {type: String, required: true},
 	date: {type: Date, required: true},
 	text: {type: String, required: true}
 });
@@ -13,7 +14,9 @@ const WallSchema = new mongoose.Schema({
 	rating: Number,
 	description: String,
 	image: String,
-	comments: [CommentSchema]
+	comments: [CommentSchema],
+	easy: Number,
+	hard: Number
 });
 
 const Wall = mongoose.model('Wall', WallSchema);

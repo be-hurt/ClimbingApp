@@ -3,6 +3,7 @@ const router = express.Router();
 const ctrlWalls = require('../controllers/walls');
 const ctrlUsers = require('../controllers/users');
 const ctrlComments = require('../controllers/comments');
+const ctrlProgress = require('../controllers/progress');
 
 //walls
 router.get('/walls', ctrlWalls.wallsReadAll);
@@ -18,6 +19,16 @@ router.get('/walls/:wallid/comments/:commentid', ctrlComments.commentsReadOne);
 
 //users
 router.get('/users', ctrlUsers.usersReadAll);
+router.get('/users/:userid', ctrlUsers.usersReadOne);
+router.put('/users/:userid/complete', ctrlUsers.usersUpdateCompletion);
+router.get('/users/:userid/complete', ctrlUsers.usersCheckCompletion);
 //note that all user post requests are handled by auth.js routes
+
+//progress
+router.get('/users/:userid/inProgress', ctrlProgress.progressReadAll);
+router.get('/users/:userid/inProgress/wall/:wallid', ctrlProgress.progressReadOne);
+router.post('/users/:userid/inProgress', ctrlProgress.createProgress);
+router.put('/users/:userid/inProgress/:trackerid', ctrlProgress.updateProgress);
+router.delete('/users/:userid/inProgress/:trackerid', ctrlProgress.deleteProgress);
 
 module.exports = router;

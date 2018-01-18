@@ -66,7 +66,7 @@ class Login extends Component {
         });
 
         // save the token
-        Auth.authenticateUser(xhr.response.token, username);
+        Auth.authenticateUser(xhr.response.token, xhr.response.data);
 
         //reset the state
         this.setState({ user_login: {login_name: '', login_password: ''}});

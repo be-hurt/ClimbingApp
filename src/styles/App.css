@@ -70,6 +70,10 @@ form {
   text-align: right;
 }
 
+.form-group h2 {
+  text-align: left;
+}
+
 .form-group input{
   border: 1px, solid, black;
   border-radius: 4px;
@@ -119,6 +123,124 @@ button {
   border: 2px solid #ff5d4f;
 }
 
+.image{
+  display: inline-block;
+  position: relative;
+}
+.image div{
+  display: block;      
+  position: absolute;
+}
+
+.image div:hover {
+  background-color: rgba(0, 155, 211, 0.4);
+}
+
+.image div p {
+  visibility: hidden;
+  color: white;
+  font-size: 3.5em;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+}
+
+.image div:hover p {
+  visibility: visible;
+}
+
+.currentProgress {
+  background-color: rgba(255, 93, 79, 0.4);
+}
+
+div .currentProgress p {
+  visibility: visible;
+}
+
+.completed {
+  background-color: rgba(255, 93, 79, 0.4);
+}
+
+#wallProgress100 {
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+}
+
+#wallProgress90 {
+  top: 10%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+}
+
+#wallProgress80 {
+  top: 20%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+}
+
+#wallProgress70 {
+  top: 30%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+}
+
+#wallProgress60 {
+  top: 40%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+}
+
+#wallProgress50 {
+  top: 50%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+}
+
+#wallProgress40 {
+  top: 60%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+}
+
+#wallProgress30 {
+  top: 70%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+}
+
+#wallProgress20 {
+  top: 80%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+}
+
+#wallProgress10 {
+  top: 90%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+}
+
 .glyphicon {
   position: relative;
   display: inline-block;
@@ -135,6 +257,18 @@ button {
 .glyphicon-star-empty {
   background-image: url("../resources/glyphicons/star-empty.png");
   background-repeat: no-repeat;
+}
+
+.message {
+  font-size: 1.15em;
+  color: #ff5d4f;
+  font-weight: bold;
+}
+
+.comment {
+  border: 1px solid black;
+  padding: 1em;
+  margin: 0.5em;
 }
 
 @media only screen and (max-width: 768px) {

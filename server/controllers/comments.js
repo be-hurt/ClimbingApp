@@ -51,13 +51,14 @@ module.exports.createComment = function(req, res) {
 const addComment = function(req, res, wall) {
 	if(!wall) {
 		sendJsonResponse(res, 404, {'message': 'wallid not found'});
-	} else if(!req.body.name) {
+	} else if(!req.body.name || !req.body.id) {
 		sendJsonResponse(res, 401, {'message': 'You must be logged in to post a comment. Please login and try again.'});
 	} else if(req.body.comment.trim().length === 0) {
 		sendJsonResponse(res, 400, {'message': 'The comment field must not be empty.'});
 	}else {
 		wall.comments.push({
 			author: req.body.name,
+			authorId: req.body.id,
 			date: new Date(),
 			text: req.body.comment
 		});
@@ -68,7 +69,7 @@ const addComment = function(req, res, wall) {
 				sendJsonResponse(res, 400, err);
 			} else {
 				thisComment = wall.comments[wall.comments.length - 1];
-				sendJsonResponse(res, 201, thisComment);
+				sendJsonResponse(res, 201, {'message': 'Comment submission successful!'});
 			}
 		});
 	}

@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-//create the schema/Users database
-const StatsSchema = new mongoose.Schema({
-	completed: {type: [String]},
-	favorites: {type: [String]}	
+const ProgressSchema = new mongoose.Schema({
+	wall: {type: String, required: true},
+	completionPercentage: {type: Number}
 });
 
 const UserSchema = mongoose.Schema({
 	username: {type: String, required: true, unique: true},
 	password: {type: String, required: true},
 	email: {type: String, required: true, unique: true},
-	stats: [StatsSchema]
+	inProgress: [ProgressSchema],
+	completed: {type: [String]}
 });
 
 //prepare methods

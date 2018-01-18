@@ -160,7 +160,7 @@ router.post('/login', (req, res, next) => {
 			success: true,
 			message: 'Login successful!',
 			token,
-			username: userData
+			data: userData
 		});
 	})(req, res, next);
 });

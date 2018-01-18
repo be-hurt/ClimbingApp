@@ -1,9 +1,8 @@
 class Auth {
 
   // Authenticate a user. Save a token string in Local Storage
-  static authenticateUser(token, user) {
+  static authenticateUser(token) {
     localStorage.setItem('token', token);
-    localStorage.setItem('username', user);
   }
 
   //check if token is saved/user is authenticated
@@ -14,7 +13,7 @@ class Auth {
   //deauthenticate a user on logout
   static deauthenticateUser() {
     localStorage.removeItem('token');
-    localStorage.removeItem('username');
+    localStorage.removeItem('data');
   }
 
   //get token value

@@ -10,6 +10,7 @@
     "express-session": "^1.15.6",
     "foreman": "^2.0.0",
     "jsonwebtoken": "^8.1.0",
+    "jwt-decode": "^2.2.0",
     "marked": "^0.3.7",
     "mongoose": "^4.13.5",
     "nodemon": "^1.12.1",

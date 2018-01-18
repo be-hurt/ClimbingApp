@@ -7,9 +7,8 @@ class CommentList extends Component {
 			return (
 				<Comment 
 					author={ comment.author } key={ comment._id } id={ comment._id } 
-					date={ comment.date } 
+					date={ comment.date } text={ comment.text }
 				>
-					{ comment.text }
 				</Comment>
 			)
 		})
