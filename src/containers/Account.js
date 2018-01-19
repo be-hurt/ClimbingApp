@@ -39,11 +39,22 @@ class Account extends Component {
   checkUser() {
     if (Auth.isUserAuthenticated()) {
       //get the token and grab the userId and username
-      let token = Auth.getToken();
-      let decoded = jwt_decode(token);
-      console.log(decoded);
+      const token = Auth.getToken();
+      const decoded = jwt_decode(token);
+      const user = decoded.sub;
       //use the decoded payload to get the user's info from the database
 
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', `http://localhost:3001/users/${user}`);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.responseType = 'json';
+      xhr.addEventListener('load', () => {
+        if(xhr.response === 200) {
+          this.setState({
+            data: xhr.response.data
+          });
+        }
+      });
     } else {
       //unauthorized
       return ('<h1>Oops!</h1><p>You are not authorized to view this page. Please log in and try again.</p>');

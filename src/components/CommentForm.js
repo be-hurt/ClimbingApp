@@ -23,7 +23,7 @@ const CommentForm = ({ onSubmit, onChange, successMessage, errors, commentData})
 CommentForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  //successMessage: PropTypes.string.isRequired,
+  successMessage: PropTypes.string.isRequired,
   errors: PropTypes.object.isRequired,
   commentData: PropTypes.object.isRequired
 };

@@ -17,6 +17,7 @@ class WallDetail extends Component {
         comment: '',
         name: ''
       },
+      successMessage: '',
       data: {},
       active: false,
       completed: false,
@@ -67,7 +68,6 @@ class WallDetail extends Component {
       }
     }
     if (previousCompleted){
-      console.log(previousCompleted);
       while (previousCompleted[0]) {
         previousCompleted[0].classList.remove('completed');
       }
@@ -248,7 +248,7 @@ class WallDetail extends Component {
         <CommentForm 
           onSubmit={this.processForm}
           onChange={this.commentChange}
-          //successMessage={this.successMessage}
+          successMessage={this.state.successMessage}
           errors={this.state.errors}
           commentData={this.state.commentData}
         />
@@ -292,15 +292,18 @@ class WallDetail extends Component {
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.responseType = 'json';
     xhr.addEventListener('load', () => {
-      if (xhr.status === 200) {
+      if (xhr.status === 201) {
         // change the component-container state
         this.setState({
           errors: {},
           commentData: {
             comment: '', 
             name: ''
-          }
+          },
+          successMessage: xhr.response.successMessage
         });
+        this.getWallData();
+        this.checkComments();
       } else {
         // failure  
        // change the component state

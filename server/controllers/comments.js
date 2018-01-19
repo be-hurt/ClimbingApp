@@ -65,14 +65,13 @@ const addComment = function(req, res, wall) {
 		wall.save(function(err, wall) {
 			let thisComment;
 			if(err) {
-				console.log(err);
 				sendJsonResponse(res, 400, err);
 			} else {
 				thisComment = wall.comments[wall.comments.length - 1];
-				sendJsonResponse(res, 201, {'message': 'Comment submission successful!'});
+				sendJsonResponse(res, 201, {'successMessage': 'Comment submission successful!'});
 			}
 		});
 	}
 };
 
-//add fucntionality for updating and deleting comments
+//add functionality for updating and deleting comments
