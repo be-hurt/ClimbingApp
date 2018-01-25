@@ -48,6 +48,11 @@ nav {
   font-family: sans-serif;
 }
 
+.banner {
+  width: 100%;
+  border: 2px, solid, black;
+}
+
 .success-message {
   color: #009bd3;
   font-weight: bold;

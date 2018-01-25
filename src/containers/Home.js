@@ -5,6 +5,7 @@ class Home extends Component {
     return (
       <div>
         <header>
+          <img className='banner' src='images/banner1.jpeg'></img>
           <h1>Welcome to Rocks</h1>
         </header>
         <p>

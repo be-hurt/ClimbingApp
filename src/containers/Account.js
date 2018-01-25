@@ -113,6 +113,7 @@ class Account extends Component {
       return (
         <div>
           <header>
+            <img className='banner' src='images/banner2.jpg'></img>
             <h1>My Account</h1>
             <h2>{ this.state.data.username }</h2>
           </header>
