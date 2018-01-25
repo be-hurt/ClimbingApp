@@ -41,10 +41,10 @@ module.exports.progressReadOne = function(req, res) {
 				function(err, user) {
 					let tracker;
 					if(!user) {
-						sendJsonResponse(res, 404, {'message': 'userid not found.'});
+						sendJsonResponse(res, 400, {'message': 'You must be logged in to view your progress.'});
 						return;
 					} else if(err) {
-						sendJsonResponse(res, 404, err);
+						sendJsonResponse(res, 400, err);
 						return;
 					}
 					if(user.inProgress && user.inProgress.length > 0) {
@@ -53,13 +53,9 @@ module.exports.progressReadOne = function(req, res) {
 								tracker = user.inProgress[i];
 							}
 						}
-						if(tracker === null) {
-							sendJsonResponse(res, 404, {'message': 'tracker not found'});
-						} else {
-							sendJsonResponse(res, 200, tracker);
-						}
+						sendJsonResponse(res, 200, tracker);
 					} else {
-						sendJsonResponse(res, 404, {'message': 'No progress trackers found.'});
+						sendJsonResponse(res, 204, {'message': 'No progress trackers found.'});
 					}
 				}
 			);
@@ -97,7 +93,9 @@ const addProgress = function(req, res, user) {
 	} else {
 		user.inProgress.push({
 			wall: req.body.wall,
-			completionPercentage: req.body.percent
+			name: req.body.name,
+			completionPercentage: req.body.percent,
+			completed: req.body.complete
 		});
 		user.save(function(err, user) {
 			let thisProgress;
@@ -140,6 +138,7 @@ module.exports.updateProgress = function(req, res) {
 						//success
 						thisTracker.wall = req.body.wallid;
 						thisTracker.completionPercentage = req.body.percent;
+						thisTracker.completed = req.body.complete;
 						user.save(function(err, user) {
 							if(err) {
 								sendJsonResponse(res, 404, {'errors': err });

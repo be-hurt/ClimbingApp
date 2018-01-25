@@ -62,7 +62,6 @@ app.use('/auth', authRoutes);
 app.use('/status', apiRoutes);
 /*AUTHENTICATION END*/
 
-//add the rest of the api routes (temporary: will move to routes folder eventually)
 router.get('/', function(req, res) {
 	res.json({ message: 'API Initialized!'});
 })

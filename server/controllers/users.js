@@ -58,19 +58,26 @@ module.exports.usersUpdateCompletion = function(req, res) {
 					sendJsonResponse(res, 400, {'errors': err});
 					return;
 				}
-				if (user.completed.includes(req.body.wallid)) {
-					sendJsonResponse(res, 400, {'message': 'This wall has already been completed'});
-					return;
-				}
-				//success
-				user.completed = req.body.wallid;
-				user.save(function(err, user) {
-					if(err) {
-						sendJsonResponse(res, 404, {'errors': err });
+				if(user.completed && user.completed.length > 0) {
+					thisCompleted = user.completed.id(req.params.completedid);
+					if(!thisCompleted) {
+						//id does not exist/cannot be found
+						sendJsonResponse(res, 404, {'message': 'completedid not found.'});
 					} else {
-						sendJsonResponse(res, 200, user.completed);
+						//success
+						thisCompleted.wall = req.body.wallid;
+						thisCompleted.name = req.body.name;
+						user.save(function(err, user) {
+							if(err) {
+								sendJsonResponse(res, 404, {'errors': err });
+							} else {
+								sendJsonResponse(res, 200, thisCompleted);
+							}
+						});
 					}
-				});
+				} else {
+					sendJsonResponse(res, 404, {'message': 'No progress tracker to update.'});
+				}
 			}
 		);
 };

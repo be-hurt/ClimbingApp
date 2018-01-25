@@ -32,6 +32,7 @@ class WallDetail extends Component {
     this.imageClick = this.imageClick.bind(this);
     this.checkProgress = this.checkProgress.bind(this);
     this.markProgress = this.markProgress.bind(this);
+    this.completionStatus = this.completionStatus.bind(this);
   }
 
   //declare methods
@@ -50,11 +51,32 @@ class WallDetail extends Component {
     //check the user's progress on the current wall (will be used for display)
     const userid = jwt_decode(Auth.getToken()).sub;
     const wallid = this.props.match.params.wall_id;
-    const getUrl = `http://localhost:3001/api/users/${userid}/inProgress/wall/${wallid}`;
-    axios.get(getUrl)
-    .then( res => {
-      this.setState({ progress: res.data.completionPercentage }, () => { this.markProgress(); });
-    })
+
+    const completion = `wallid=${wallid}`;
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `http://localhost:3001/api/users/${userid}/inProgress/wall/${wallid}`);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.responseType = 'json';
+    xhr.addEventListener('load', () => {
+      if(xhr.status === 200) {
+        this.setState({
+          progress: xhr.response.completionPercentage
+        });
+        this.markProgress();
+      } else if(xhr.status === 204) {
+        this.setState({
+          message: 'This wall has not been started yet.'
+        })
+      } else {
+        const errors = xhr.response.errors ? xhr.response.errors : {};
+        errors.summary = xhr.response.message;
+        this.setState({
+          errors
+        });
+        console.log(this.state.errors);
+      }
+    });
+    xhr.send(completion);
   }
 
   markProgress() {
@@ -62,149 +84,131 @@ class WallDetail extends Component {
     let previousProgress = document.getElementsByClassName('currentProgress');
     let previousCompleted = document.getElementsByClassName('completed');
 
-    if (previousProgress.length !== 0) {
+    if(previousProgress.length !== 0) {
       for (let i=0; i < previousProgress.length; i++) {
         previousProgress[i].removeAttribute('class');
       }
     }
-    if (previousCompleted){
-      while (previousCompleted[0]) {
+    if(previousCompleted){
+      while(previousCompleted[0]) {
         previousCompleted[0].classList.remove('completed');
       }
     }
 
     let myProgress = document.getElementById('wallProgress' + this.state.progress);
-    if (myProgress) {
+    if(myProgress) {
       myProgress.setAttribute('class', 'currentProgress');
 
-      for (let i=10; i < this.state.progress; i+=10) {
+      for(let i=10; i < this.state.progress; i+=10) {
         let completed = document.getElementById('wallProgress' + i);
         completed.setAttribute('class', 'completed');
       }
     } 
   }
 
+
+
   imageClick(percent) {
     //need to get the current userid from the token
     const userid = jwt_decode(Auth.getToken()).sub;
     const wallid = this.props.match.params.wall_id;
-
-    if (percent === 100) {
-      //add current wallid to the user's completed list
-      const completion = `wallid=${wallid}`;
-      const xhrCompletion = new XMLHttpRequest();
-      xhrCompletion.open('PUT', `http://localhost:3001/api/users/${userid}/complete`);
-      xhrCompletion.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      xhrCompletion.responseType = 'json';
-      xhrCompletion.addEventListener('load', () => {
-        if(xhrCompletion.status === 200) {
-          this.setState({
-            errors: {},
-            completionMessage: xhrCompletion.response.message
-          });
-        } else {
-          const errors = xhrCompletion.response.errors ? xhrCompletion.response.errors : {};
-          errors.summary = xhrCompletion.response.message;
-          this.setState({
-            errors,
-            completionMessage: xhrCompletion.response.message
-          });
-        }
-      });
-      xhrCompletion.send(completion);
-    }
     const formData = `userid=${userid}`;
     //assign a variable to store the userdata in
     let inProgress;
+    let complete = false;
+    if(percent === 100) {
+      complete = true;
+      this.setState({ completed: true });
+    }
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `http://localhost:3001/api/users/${userid}/inProgress/wall/${wallid}`);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.responseType = 'json';
-    xhr.addEventListener('load', () => {
-      if (xhr.status === 200) {
+    const xhrProgress = new XMLHttpRequest();
+    xhrProgress.open('GET', `http://localhost:3001/api/users/${userid}/inProgress/wall/${wallid}`);
+    xhrProgress.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhrProgress.responseType = 'json';
+    xhrProgress.addEventListener('load', () => {
+      if(xhrProgress.status === 200) {
+
         this.setState({
           errors: {},
         });
-
-        inProgress = xhr.response;
-        if (inProgress) {
-          //update the record
-          //need to have the trackerid
-          const trackerid = inProgress._id;
-          const updateData = `percent=${percent}&wallid=${wallid}`;
-          const xhr2 = new XMLHttpRequest();
-          xhr2.open('PUT', `http://localhost:3001/api/users/${userid}/inProgress/${trackerid}`);
-          xhr2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-          xhr2.responseType = 'json';
-          xhr2.addEventListener('load', () => {
-            if(xhr2.status === 200) {
-              console.log(xhr2.response);
-              this.setState({
-                errors: {},
-                progress: xhr2.response.completionPercentage,
-                message: 'Progress tracker updated'
-              }, () => { this.markProgress(); }
-              );
-            } else {
-              const errors = xhr2.response.errors ? xhr2.response.errors : {};
-              errors.summary = xhr2.response.message;
-              this.setState({
-                errors,
-                message: xhr2.response.message
-              });
-              alert('error');
-            }
-          });
-          xhr2.send(updateData);
-        } else{
-          //create a new record
-          const createData = `percent=${percent}&wall=${wallid}`;
-          const xhr3 = new XMLHttpRequest();
-          xhr3.open('POST', `http://localhost:3001/api/users/${userid}/inProgress/`);
-          xhr3.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-          xhr3.responseType = 'json';
-          xhr3.addEventListener('load', () => {
-            if(xhr3.status === 200) {
-              this.setState({
-                errors: {},
-                message: xhr3.response.message
-              });
-            } else {
-              const errors = xhr3.response.errors ? xhr3.response.errors : {};
-              errors.summary = xhr3.response.message;
-              this.setState({
-                errors,
-                message: xhr3.response.message
-              });
-              alert('error');
-            }
-          });
-          xhr3.send(createData);
-        }
-      } else {
-        // failure  
-        const errors = xhr.response.errors ? xhr.response.errors : {};
-        errors.summary = xhr.response.message;
-        this.setState({
-          errors,
-          message: xhr.response.message
+        
+        inProgress = xhrProgress.response;
+        //update the record
+        //need to have the trackerid
+        const trackerid = inProgress._id;
+        const updateData = `percent=${percent}&wallid=${wallid}&complete=${complete}`;
+        const xhr2 = new XMLHttpRequest();
+        xhr2.open('PUT', `http://localhost:3001/api/users/${userid}/inProgress/${trackerid}`);
+        xhr2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr2.responseType = 'json';
+        xhr2.addEventListener('load', () => {
+          if(xhr2.status === 200) {
+            this.setState({
+              errors: {},
+              progress: xhr2.response.completionPercentage,
+              message: 'Progress tracker updated'
+            }, () => { this.markProgress(); }
+            );
+            this.completionStatus();
+          } else {
+            const errors = xhr2.response.errors ? xhr2.response.errors : {};
+            errors.summary = xhr2.response.message;
+            this.setState({
+              errors,
+              message: xhr2.response.message
+            });
+            alert('error');
+          }
         });
+        xhr2.send(updateData);
+      } else if(xhrProgress.status === 204) {
+        //create a new record
+        const createData = `percent=${percent}&wall=${wallid}&name=${this.state.data.name}&complete=${complete}`;
+        const xhr3 = new XMLHttpRequest();
+        xhr3.open('POST', `http://localhost:3001/api/users/${userid}/inProgress/`);
+        xhr3.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr3.responseType = 'json';
+        xhr3.addEventListener('load', () => {
+          if(xhr3.status === 201) {
+            this.setState({
+              errors: {},
+              message: xhr3.response.message
+            });
+            this.checkProgress();
+            this.completionStatus();
+          } else {
+            const errors = xhr3.response.errors ? xhr3.response.errors : {};
+            errors.summary = xhr3.response.message;
+            this.setState({
+              errors,
+              message: xhr3.response.message
+            });
+          }
+        });
+          xhr3.send(createData);
+        } else {
+          // failure  
+          const errors = xhrProgress.response.errors ? xhrProgress.response.errors : {};
+          errors.summary = xhrProgress.response.message;
+          this.setState({
+            errors,
+            message: xhrProgress.response.message
+          });
       }
-    });
-    xhr.send(formData);
+    }); 
+    xhrProgress.send(formData);
   }
 
   //function for displaying rating stars
   ratingDisplay() {
-    for (let i = 0; i < this.state.data.rating; i++) {
+    for(let i = 0; i < this.state.data.rating; i++) {
       let myRating = document.getElementById("rating");
       let star = document.createElement("SPAN");
       star.setAttribute("class", "glyphicon glyphicon-star");
       myRating.appendChild(star);
     }
 
-    for (let i = this.state.data.rating; i < 5; i++) {
+    for(let i = this.state.data.rating; i < 5; i++) {
       let myRating = document.getElementById("rating");
       let star = document.createElement("SPAN");
       star.setAttribute("class", "glyphicon glyphicon-star-empty");
@@ -225,25 +229,45 @@ class WallDetail extends Component {
     }
   }
 
+  completionStatus() {
+    if(this.state.completed === true) {
+      this.setState({completionMessage: 'Congrats! This wall has been completed!'});
+    } else {
+      this.setState({completionMessage: 'This wall has not yet been completed.'});
+    }
+  }
+
   //check to see if the user has completed the wall
   //if so, display a congrats message
   checkCompletion() {
     const userid = jwt_decode(Auth.getToken()).sub;
     const wallid = this.props.match.params.wall_id;
-    const getUrl = `http://localhost:3001/api/users/${userid}/complete`;
-    axios.get(getUrl)
-    .then( res => {
-      if (res.data.completed.includes(wallid)) {
-        this.setState({completed: true, completionMessage: 'Congrats! This wall has been completed!'});
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `http://localhost:3001/api/users/${userid}/inProgress/wall/${wallid}`);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.responseType = 'json';
+    xhr.addEventListener('load', () => {
+      if(xhr.status === 200) {
+        if(xhr.response.completed === true) {
+          this.setState({completed: true});
+          this.completionStatus();
       } else {
-        this.setState({completionMessage: 'This wall has not yet been completed.'});
+        const errors = xhr.response.errors ? xhr.response.errors : {};
+        errors.summary = xhr.response.message;
+        this.setState({
+          errors,
+          message: xhr.response.message
+        });
       }
-    })
+    }
+    });
+    this.completionStatus();
+    xhr.send();
   }
 
   //check to see if user is logged in: if so, display the comment form. If not, display a message prompting them to login
   checkLogin() {
-    if (Auth.isUserAuthenticated()) {
+    if(Auth.isUserAuthenticated()) {
       return (
         <CommentForm 
           onSubmit={this.processForm}
@@ -292,7 +316,7 @@ class WallDetail extends Component {
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.responseType = 'json';
     xhr.addEventListener('load', () => {
-      if (xhr.status === 201) {
+      if(xhr.status === 201) {
         // change the component-container state
         this.setState({
           errors: {},
@@ -334,6 +358,7 @@ class WallDetail extends Component {
 
     return (
       <div id="wall">
+        <h1>{ this.state.data.name }</h1>
         <div className="image">
           <img className='wall-detail' src={`/data/${this.state.data.image}`} alt={`Detailed view of ${this.state.data.name} climbing route.`}/>
           <div id="wallProgress100" onClick={() => { this.imageClick(100) }}><p className="percent">100%</p></div>

@@ -75,3 +75,41 @@ const addComment = function(req, res, wall) {
 };
 
 //add functionality for updating and deleting comments
+module.exports.commentsDeleteOne = function(req, res) {
+	if(!req.params.wallid || !req.params.commentid) {
+		sendJsonResponse(res, 404, {'message': 'Not found: wallid and commentid are both required.'});
+		return;
+	} 
+
+	Wall
+		.findById(req.params.wallid)
+		.select('comments')
+		.exec(
+			function(err, wall) {
+				if(!wall) {
+					sendJsonResponse(res, 404, {'message': 'wallid not found.'});
+					return;
+				} else if(err) {
+					sendJsonResponse(res, 404, err);
+					return
+				}
+				if(wall.comments && wall.comments.length > 0) {
+					//make sure the commentid exists
+					if(!wall.comments.id(req.params.commentid)) {
+						sendJsonResponse(res, 404, {'message': 'commentid not found.'});
+					} else {
+						wall.comments.id(req.params.commentid).remove();
+						wall.save(function(err) {
+							if(err) {
+								sendJsonResponse(res, 404, err);
+							} else {
+								sendJsonResponse(res, 204, {'message': 'Comment successfully deleted.'});
+							}
+						});
+					}
+				} else {
+					sendJsonResponse(res, 404, {'message': 'No comment to delete.'});
+				}
+			}
+		);
+};

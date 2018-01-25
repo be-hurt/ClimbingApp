@@ -3,15 +3,16 @@ const bcrypt = require('bcrypt');
 
 const ProgressSchema = new mongoose.Schema({
 	wall: {type: String, required: true},
-	completionPercentage: {type: Number}
+	name: {type: String, required: true},
+	completionPercentage: {type: Number},
+	completed: {type: Boolean}
 });
 
 const UserSchema = mongoose.Schema({
 	username: {type: String, required: true, unique: true},
 	password: {type: String, required: true},
 	email: {type: String, required: true, unique: true},
-	inProgress: [ProgressSchema],
-	completed: {type: [String]}
+	inProgress: [ProgressSchema]
 });
 
 //prepare methods
