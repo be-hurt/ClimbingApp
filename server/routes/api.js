@@ -14,7 +14,7 @@ router.get('/walls/:wallid', ctrlWalls.wallsReadOne);
 router.post('/walls/:wallid/comments', ctrlComments.createComment);
 //router.get('/walls/:wallid/comments', ctrlComments.commentsReadAll);
 router.get('/walls/:wallid/comments/:commentid', ctrlComments.commentsReadOne);
-//router.put('/walls/:wallid/comments/:commentid', ctrlComment.commentsUpdateOne);
+router.put('/walls/:wallid/comments/:commentid', ctrlComments.commentsUpdateOne);
 router.delete('/walls/:wallid/comments/:commentid', ctrlComments.commentsDeleteOne);
 
 //users

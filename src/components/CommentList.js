@@ -7,7 +7,7 @@ class CommentList extends Component {
 			return (
 				<Comment 
 					author={ comment.author } authorid={ comment.authorId} key={ comment._id } id={ comment._id } 
-					date={ comment.date } text={ comment.text }
+					date={ comment.date } text={ comment.text } wall={this.props.wall}
 				>
 				</Comment>
 			)

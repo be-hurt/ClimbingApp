@@ -5,12 +5,17 @@ class Home extends Component {
     return (
       <div>
         <header>
-          <img className='banner' src='images/banner1.jpeg'></img>
-          <h1>Welcome to Rocks</h1>
+          <div id='bannerContainer'>
+            <img className='banner' src='images/banner1.jpeg'></img>
+          </div>
+          <h1>Welcome to Piton</h1>
         </header>
-        <p>
-          Yes, that name is a placeholder. This'll look pretty eventually.
-        </p>
+        <div className='content'>
+          <p>
+            Piton is a free online tracker for indoor rock climbers. It enables its users to keep track of their progress on individual walls in the gym in order to 
+            help everyone set and meet their own personal climbing goals.
+          </p>
+        </div>
       </div>
     );
   }

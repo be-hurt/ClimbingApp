@@ -7,9 +7,10 @@ var sendJsonResponse = function(res, status, content) {
 };
 
 module.exports.commentsReadOne = function(req, res) {
-	if (req.params && req.params.wallid) {
+	if (req.params && req.params.wallid && req.params.commentid) {
 		Wall
-			.findById(req.params._id)
+			.findById(req.params.wallid)
+			.select('comments')
 			.exec(function(err, wall) {
 				if (!wall) {
 					sendJsonResponse(res, 404, {
@@ -20,7 +21,13 @@ module.exports.commentsReadOne = function(req, res) {
 					sendJsonResponse(res, 404, err);
 					return
 				} 
-				sendJsonResponse(res, 200, wall);
+
+				if(!wall.comments.id(req.params.commentid)) {
+					sendJsonResponse(res, 404, {'message': 'commentid not found.'});
+				} else {
+					const comment  = wall.comments.id(req.params.commentid);
+					sendJsonResponse(res, 200, comment);
+				}
 			});
 	} else {
 		sendJsonResponse(res, 404, {'message': 'No wallid in request'});
@@ -74,10 +81,51 @@ const addComment = function(req, res, wall) {
 	}
 };
 
-//add functionality for updating and deleting comments
+module.exports.commentsUpdateOne = function(req, res) {
+	if(!req.params.wallid || !req.params.commentid || !req.body.user) {
+		sendJsonResponse(res, 404, {'message': 'Not found: wallid, userid and commentid are required.'});
+		return;
+	} else if(!req.body.comment || req.body.comment.length < 1) {
+		sendJsonResponse(res, 404, {'message': 'Comment field must not be empty.'});
+	}
+
+	Wall
+		.findById(req.params.wallid)
+		.select('comments')
+		.exec(
+			function(err, wall) {
+				if(!wall) {
+					sendJsonResponse(res, 404, {'message': 'wallid not found.'});
+					return;
+				} else if(err) {
+					sendJsonResponse(res, 404, err);
+					return;
+				}
+				if(wall.comments && wall.comments.length > 0) {
+					const comment = wall.comments.id(req.params.commentid);
+					if(!comment) {
+						sendJsonResponse(res, 404, {'message': 'commentid not found.'});
+					} else if(req.body.user !== comment.authorId){
+						sendJsonResponse(res, 401, {'message': 'You are not authorized to edit this comment.'});
+					} else {
+						comment.text = req.body.comment;
+						wall.save(function(err) {
+							if(err) {
+								sendJsonResponse(res, 404, err);
+							} else {
+								sendJsonResponse(res, 200, {'message': 'Comment successfully edited.'});
+							}
+						});
+					}
+				}
+			}
+
+		)
+}
+
 module.exports.commentsDeleteOne = function(req, res) {
-	if(!req.params.wallid || !req.params.commentid) {
-		sendJsonResponse(res, 404, {'message': 'Not found: wallid and commentid are both required.'});
+	if(!req.params.wallid || !req.params.commentid || !req.body.userid) {
+		sendJsonResponse(res, 404, {'message': 'Not found: wallid, userid and commentid are required.'});
 		return;
 	} 
 
@@ -91,19 +139,22 @@ module.exports.commentsDeleteOne = function(req, res) {
 					return;
 				} else if(err) {
 					sendJsonResponse(res, 404, err);
-					return
+					return;
 				}
 				if(wall.comments && wall.comments.length > 0) {
+					const comment = wall.comments.id(req.params.commentid);
 					//make sure the commentid exists
-					if(!wall.comments.id(req.params.commentid)) {
+					if(!comment) {
 						sendJsonResponse(res, 404, {'message': 'commentid not found.'});
+					} else if(req.body.userid !== comment.authorId){
+						sendJsonResponse(res, 401, {'message': 'You are not authorized to delete this comment.'});
 					} else {
 						wall.comments.id(req.params.commentid).remove();
 						wall.save(function(err) {
 							if(err) {
 								sendJsonResponse(res, 404, err);
 							} else {
-								sendJsonResponse(res, 204, {'message': 'Comment successfully deleted.'});
+								sendJsonResponse(res, 200, {'message': 'Comment successfully deleted.'});
 							}
 						});
 					}

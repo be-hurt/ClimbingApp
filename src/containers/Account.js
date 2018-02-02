@@ -103,7 +103,7 @@ class Account extends Component {
       return(<li>You currently do not have any walls in progress.</li>);
     }
     for(let i=0; i < this.state.progress.length; i++) {
-      return(<li>Wall: {this.state.progress[i].name}, Progress: {this.state.progress[i].percent}</li>);
+      return(<li>Wall: {this.state.progress[i].name}, Progress: {this.state.progress[i].percent}%</li>);
     }
   }
 
@@ -113,18 +113,22 @@ class Account extends Component {
       return (
         <div>
           <header>
-            <img className='banner' src='images/banner2.jpg'></img>
+            <div id='bannerContainer'>
+              <img className='banner' src='images/banner2.jpg'></img>
+            </div>
             <h1>My Account</h1>
             <h2>{ this.state.data.username }</h2>
           </header>
-          <h3>In Progress:</h3>
+          <div className='content'>
+            <h3>In Progress:</h3>
+              <ul>
+                { this.makeProgressList() }
+              </ul>
+            <h3>Completed:</h3>
             <ul>
-              { this.makeProgressList() }
+              { this.makeCompletedList() }
             </ul>
-          <h3>Completed:</h3>
-          <ul>
-            { this.makeCompletedList() }
-          </ul>
+          </div>
         </div>
       );
     } else {

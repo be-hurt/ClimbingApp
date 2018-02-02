@@ -32,7 +32,7 @@ class List extends Component {
 
   render() {
     return (
-      <div>
+      <div className='content'>
           <h1>Active Walls:</h1>
           <WallList data={this.state.data} />
       </div>

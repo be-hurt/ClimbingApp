@@ -31,9 +31,9 @@ function checkAuth() {
 }
 
 const Nav = ({children}) => (
-	<nav>
-		{checkAuth()}
-	</nav>
+		<nav>
+			{checkAuth()}
+		</nav>
 );
 
 export default Nav;

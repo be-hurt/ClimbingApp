@@ -1,29 +1,49 @@
+/*--FONTS--*/
+/* latin-ext */
+@font-face {
+  font-family: 'Didact Gothic';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Didact Gothic Regular'), local('DidactGothic-Regular'), url(https://fonts.gstatic.com/s/didactgothic/v11/v8_72sD3DYMKyM0dn3LtWv_TTS9ENtVKaiibjCpIzfo.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Didact Gothic';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Didact Gothic Regular'), local('DidactGothic-Regular'), url(https://fonts.gstatic.com/s/didactgothic/v11/v8_72sD3DYMKyM0dn3LtWmYKogTrBb-Yb2DFwx30qLM.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
+}
+/*--END FONTS--*/
+
 body {
   margin: 0;
   padding: 0;
-  background-color: #009bd3;
+  background-color: #38add9;
 }
 
 #app {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(10, 10%);
-  grid-template-rows: repeat(10, 10%);
+  grid-template-areas: "nav";
+  grid-template-columns: repeat(20, 5%);
+  grid-template-rows: repeat(20, 5%);
   height: 100%;
   width: 100%;
 }
 
 nav {
-  background-color: black;
-  grid-column: 1 / 11;
+  grid-area: nav;
+  background-color: #141414;
+  grid-column: 1 / 21;
   grid-row: 1;
 }
 
 .nav {
-  grid-column: 3 / 9;
   color: white;
-  font-family: sans-serif;
+  font-family: 'Didact Gothic', 'sans-serif';
   font-size: 1.5em;
 }
 
@@ -37,20 +57,52 @@ nav {
 .nav a {
   color: white;
   text-decoration: none;
+  font-weight: normal;
 }
 
 .container {
   height: 100%;
-  padding: 3em;
-  grid-column: 3 / 9;
+  grid-column: 4 / 18;
   grid-row: 2 / 6;
   background-color: white;
   font-family: sans-serif;
+  margin-bottom: 5%;
+}
+
+#bannerContainer {
+  background-color: #b51f09;
+  padding: 1em;
 }
 
 .banner {
   width: 100%;
-  border: 2px, solid, black;
+}
+
+header h1 {
+  color: #2a2a2a;
+  font-family: 'Didact Gothic', 'sans-serif';
+  padding: 5% 8% 0% 8%;
+  margin: 0;
+}
+
+header h2 {
+  color: #b51f09;
+  font-family: 'Didact Gothic', 'sans-serif';
+  font-size: 2em;
+  padding: 2% 8% 0% 8%;
+  margin: 0;
+}
+
+.content {
+  padding: 0% 8% 10% 8%;
+  color: #2a2a2a;
+  font-family: 'Didact Gothic', 'sans-serif';
+  font-size: 1.5em;
+}
+
+a {
+  color: #b51f09;
+  font-weight: bold;
 }
 
 .success-message {
@@ -66,8 +118,11 @@ nav {
 }
 
 form {
+  font-family: 'Didact Gothic', sans-serif;
+  margin: 3em;
   padding: 1em;
   display: inline-block;
+  font-size: 1.2em;
 }
 
 .form-group {
@@ -80,9 +135,31 @@ form {
 }
 
 .form-group input{
+  margin-left: 1em;
   border: 1px, solid, black;
   border-radius: 4px;
   padding: .3em;
+}
+
+.comment-form form {
+  width: 100%;
+  color: #009bd3;
+  padding: 0;
+  margin: 0;
+}
+
+.comment-form .form-group {
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+.comment-form textarea {
+  width: 100%;
+  height: 10%;
+  font-family: sans-serif;
+  font-size: 0.8em;
+  color: #2a2a2a;
 }
 
 button {
@@ -90,12 +167,13 @@ button {
   border: none;
   color: white;
   text-decoration: none;
-  padding: 1em;
+  padding: .75em;
+  margin: .5em;
   cursor: pointer;
 }
 
 .wall {
-  border: 2px solid #ff5d4f;
+  border: 2px solid #b51f09;
   max-width: 300px;
 }
 
@@ -105,11 +183,12 @@ button {
 
 .wall p {
   margin: .5em;
+  font-size: .75em;
 }
 
 .wall a {
   text-decoration: none;
-  color: #ff5d4f;
+  color: #b51f09;
 }
 
 .wall a:hover {
@@ -125,7 +204,7 @@ button {
 
 .wall-detail {
   max-width: 100%;
-  border: 2px solid #ff5d4f;
+  border: 2px solid #b51f09;
 }
 
 .image{
@@ -138,13 +217,13 @@ button {
 }
 
 .image div:hover {
-  background-color: rgba(0, 155, 211, 0.4);
+  background-color: rgba(0, 155, 211, 0.5);
 }
 
 .image div p {
   visibility: hidden;
   color: white;
-  font-size: 3.5em;
+  font-size: 2.3em;
   font-weight: bold;
   padding: 0;
   margin: 0;
@@ -155,7 +234,7 @@ button {
 }
 
 .currentProgress {
-  background-color: rgba(255, 93, 79, 0.4);
+  background-color: rgba(181, 31, 9, 0.5);
 }
 
 div .currentProgress p {
@@ -163,7 +242,7 @@ div .currentProgress p {
 }
 
 .completed {
-  background-color: rgba(255, 93, 79, 0.4);
+  background-color: rgba(181, 31, 9, 0.5);
 }
 
 #wallProgress100 {
@@ -265,15 +344,16 @@ div .currentProgress p {
 }
 
 .message {
-  font-size: 1.15em;
-  color: #ff5d4f;
+  font-size: 1em;
+  color: #009bd3;
   font-weight: bold;
 }
 
 .comment {
+  font-size: .9em;
   border: 1px solid black;
-  padding: 1em;
-  margin: 0.5em;
+  padding: 0.5em;
+  margin: 0.5em 0em 0.5em 0em;
 }
 
 .editButton {
@@ -284,15 +364,15 @@ div .currentProgress p {
 
 @media only screen and (max-width: 768px) {
   nav {
-    background-color: black;
-    grid-column: 1 / 11;
+    background-color: #141414;
+    grid-column: 1 / 21;
     grid-row: 1;
   }
 
   .nav {
     grid-column: 3 / 9;
     color: white;
-    font-family: sans-serif;
+    font-family: 'Didact Gothic', sans-serif;
     font-size: 1em;
   }
 
@@ -309,9 +389,13 @@ div .currentProgress p {
   }
   /* For mobile phones: */
   .container {
-    grid-column: 1 / 11;
+    grid-column: 1 / 21;
     grid-row: 2 / 11;
-    padding: 1.5em;
+  }
+
+  .content {
+    padding: 1em;
+    font-size: 1em;
   }
 
   .wall-header {
@@ -322,16 +406,23 @@ div .currentProgress p {
 
   .wall-detail {
   max-width: 100%;
-  border: 2px solid #ff5d4f;
+  border: 2px solid #b51f09;
+  }
+
+  .image div p {
+    font-size: 3em;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
   }
 
   form {
-    padding: 1em;
+    padding: 0.5em;
     display: inline-block;
   }
 
   .form-group {
-    padding: .5em;
+    padding: 0.5em;
     width: 100%;
     display: inline-block;
     text-align: left;
@@ -361,5 +452,14 @@ div .currentProgress p {
     background-image: url("../resources/glyphicons/star-empty.png");
     background-repeat: no-repeat;
     background-size: 1.2em;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .image div p {
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
   }
 }
