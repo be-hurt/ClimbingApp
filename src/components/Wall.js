@@ -14,11 +14,13 @@ class Wall extends Component {
 				<div className='wall-header'>
 					<img src={`/data/${this.props.image}`} alt="Rock climbing wall"/>
 				</div>
-				<Link to={`/walls/${this.props.id}`}><h3>{this.props.name}</h3></Link>
-				<p>Added: {this.props.date}</p>
-				<p>Difficulty: {this.props.difficulty}</p>
-				<p>Rating: {this.props.rating}</p>
-				<span dangerouslySetInnerHTML={ this.rawMarkup() } />
+				<div className='wall-card-text'>
+					<Link to={`/walls/${this.props.id}`}><h3>{this.props.name}</h3></Link>
+					<p>Added: {this.props.date}</p>
+					<p>Difficulty: {this.props.difficulty}</p>
+					<p>Rating: {this.props.rating}</p>
+					<span dangerouslySetInnerHTML={ this.rawMarkup() } />
+				</div>
 			</div>
 		)
 	}

@@ -47,13 +47,17 @@ module.exports.progressReadOne = function(req, res) {
 						sendJsonResponse(res, 400, err);
 						return;
 					}
-					if(user.inProgress && user.inProgress.length > 0) {
+					if(user.inProgress && user.inProgress.length >= 1 ) {
 						for (let i=0; i < user.inProgress.length; i++) {
 							if(user.inProgress[i].wall === req.params.wallid) {
 								tracker = user.inProgress[i];
 							}
 						}
-						sendJsonResponse(res, 200, tracker);
+						if(tracker) {
+							sendJsonResponse(res, 200, tracker);
+						} else {
+							sendJsonResponse(res, 204, {'message': 'This wall has not been started.'});
+						}
 					} else {
 						sendJsonResponse(res, 204, {'message': 'No progress trackers found.'});
 					}

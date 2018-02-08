@@ -56,7 +56,6 @@ class Account extends Component {
         this.setState({
           data: xhr.response
         });
-        console.log(this.state.data);
         this.checkProgress();
       } else {
         const errors = xhr.response.errors ? xhr.response.errors : {};
@@ -102,8 +101,12 @@ class Account extends Component {
     if(this.state.progress.length === 0) {
       return(<li>You currently do not have any walls in progress.</li>);
     }
+    let myProgress = document.getElementById('progressList');
     for(let i=0; i < this.state.progress.length; i++) {
-      return(<li>Wall: {this.state.progress[i].name}, Progress: {this.state.progress[i].percent}%</li>);
+      let progressItem = document.createElement("LI");
+      let text = document.createTextNode(`${this.state.progress[i].name}, ${this.state.progress[i].percent}%`);
+      progressItem.appendChild(text);
+      myProgress.appendChild(progressItem);
     }
   }
 
@@ -114,14 +117,14 @@ class Account extends Component {
         <div>
           <header>
             <div id='bannerContainer'>
-              <img className='banner' src='images/banner2.jpg'></img>
+              <img className='banner' src='images/banner2.jpg' alt='Child coming down from indoor climbing wall'></img>
             </div>
             <h1>My Account</h1>
             <h2>{ this.state.data.username }</h2>
           </header>
           <div className='content'>
             <h3>In Progress:</h3>
-              <ul>
+              <ul id='progressList'>
                 { this.makeProgressList() }
               </ul>
             <h3>Completed:</h3>

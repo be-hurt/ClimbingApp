@@ -6,7 +6,7 @@ class Home extends Component {
       <div>
         <header>
           <div id='bannerContainer'>
-            <img className='banner' src='images/banner1.jpeg'></img>
+            <img className='banner' src='images/banner1.jpeg' alt='man climbing indoor rock-climbing wall'></img>
           </div>
           <h1>Welcome to Piton</h1>
         </header>

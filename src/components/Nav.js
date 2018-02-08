@@ -11,21 +11,25 @@ function checkAuth() {
 	//check if the user has already been authenticated
 	if (Auth.isUserAuthenticated()) {
 		return (
-			<ul className="nav">
-				<li><a href="/">Home</a></li>
-				<li><a href="/account">My Account</a></li>
-				<li><a href="/walls">Wall List</a></li>
-				<li><a href="/" onClick={logout}>Logout</a></li>
-			</ul>
+			<div className="nav-text">
+				<ul className="nav">
+					<li className="logo"><a href="/">Piton</a></li>
+					<li className="nav-link"><a href="/" onClick={logout}>Logout</a></li>
+					<li className="nav-link"><a href="/walls">Wall List</a></li>
+					<li className="nav-link"><a href="/account">My Account</a></li>
+				</ul>
+			</div>
 		);
 	} else {
 		return (
-			<ul className="nav">
-				<li><a href="/">Home</a></li>
-				<li><a href="/walls">Wall List</a></li>
-				<li><a href="/login">Login</a></li>
-				<li><a href="/signup">Sign Up</a></li>
-			</ul>
+			<div className="nav-text">
+				<ul className="nav">
+					<li className="logo"><a href="/">Piton</a></li>
+					<li className="nav-link"><a href="/signup">Sign Up</a></li>
+					<li className="nav-link"><a href="/login">Login</a></li>
+					<li className="nav-link"><a href="/walls">Wall List</a></li>
+				</ul>
+			</div>
 		);
 	}
 }

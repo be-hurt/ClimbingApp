@@ -60,9 +60,15 @@ class WallDetail extends Component {
       xhr.responseType = 'json';
       xhr.addEventListener('load', () => {
         if(xhr.status === 200) {
-          this.setState({
-            progress: xhr.response.completionPercentage
-          });
+          if(xhr.response.completionPercentage) {
+            this.setState({
+              progress: xhr.response.completionPercentage
+            });
+          } else {
+            this.setState({
+              progress: 0
+            });
+          }
           this.markProgress();
         } else if(xhr.status === 204) {
           this.setState({
@@ -209,15 +215,15 @@ class WallDetail extends Component {
 
   //function for displaying rating stars
   ratingDisplay() {
+    let myRating = document.getElementById("rating");
     for(let i = 0; i < this.state.data.rating; i++) {
-      let myRating = document.getElementById("rating");
       let star = document.createElement("SPAN");
       star.setAttribute("class", "glyphicon glyphicon-star");
       myRating.appendChild(star);
     }
 
     for(let i = this.state.data.rating; i < 5; i++) {
-      let myRating = document.getElementById("rating");
+      //let myRating = document.getElementById("rating");
       let star = document.createElement("SPAN");
       star.setAttribute("class", "glyphicon glyphicon-star-empty");
       myRating.appendChild(star);
@@ -322,7 +328,7 @@ class WallDetail extends Component {
     const token = Auth.getToken();
     const decoded = jwt_decode(token);
 
-    const name = localStorage.getItem('username');
+    const name = decoded.name;
     const comment = this.state.commentData.comment;
     const id = decoded.sub;
     const formData = `name=${name}&id=${id}&comment=${comment}`;

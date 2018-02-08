@@ -27,7 +27,6 @@ body {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-areas: "nav";
   grid-template-columns: repeat(20, 5%);
   grid-template-rows: repeat(20, 5%);
   height: 100%;
@@ -35,13 +34,24 @@ body {
 }
 
 nav {
-  grid-area: nav;
+  grid-column-start: 1;
+  grid-column-end: 21;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  display: grid;
+  grid-template-columns: repeat(20, 5%);
+  grid-template-rows: repeat(1, 5%);
   background-color: #141414;
-  grid-column: 1 / 21;
-  grid-row: 1;
+}
+
+.nav-text {
+  grid-column-start: 4;
+  grid-column-end: 18;
 }
 
 .nav {
+  padding: 0;
+  margin: 0.25em, 0, 0.25em, 0;
   color: white;
   font-family: 'Didact Gothic', 'sans-serif';
   font-size: 1.5em;
@@ -60,10 +70,22 @@ nav {
   font-weight: normal;
 }
 
+.nav .logo {
+  text-align: left;
+  font-size: 1.75em;
+  padding-left: 1em;
+}
+
+.nav .nav-link {
+  float: right;
+  margin-top: 0.75em;
+  padding-right: 2em;
+}
+
 .container {
   height: 100%;
   grid-column: 4 / 18;
-  grid-row: 2 / 6;
+  grid-row: 2 / 10;
   background-color: white;
   font-family: sans-serif;
   margin-bottom: 5%;
@@ -71,7 +93,7 @@ nav {
 
 #bannerContainer {
   background-color: #b51f09;
-  padding: 1em;
+  padding: 0.6em;
 }
 
 .banner {
@@ -104,6 +126,8 @@ a {
   color: #b51f09;
   font-weight: bold;
 }
+
+/*FORMS*/
 
 .success-message {
   color: #009bd3;
@@ -171,8 +195,13 @@ button {
   margin: .5em;
   cursor: pointer;
 }
+/*END FORMS*/
 
+/*WALL CARD DISPLAY*/
 .wall {
+  display: inline-block;
+  margin-right: 1.5em;
+  margin-bottom: 1.5em;
   border: 2px solid #b51f09;
   max-width: 300px;
 }
@@ -206,7 +235,9 @@ button {
   max-width: 100%;
   border: 2px solid #b51f09;
 }
+/*END WALL CARD DISPLAY*/
 
+/*PROGRESS TRACKER DISPLAY*/
 .image{
   display: inline-block;
   position: relative;
@@ -324,7 +355,8 @@ div .currentProgress p {
   height: 10%;
   text-align: center;
 }
-
+/*END WALL PROGRESS DISPLAY*/
+/*WALL DETAIL PAGE*/
 .glyphicon {
   position: relative;
   display: inline-block;
@@ -361,31 +393,21 @@ div .currentProgress p {
   padding: .5em;
   border-radius: .3em;
 }
-
-@media only screen and (max-width: 768px) {
-  nav {
-    background-color: #141414;
-    grid-column: 1 / 21;
-    grid-row: 1;
-  }
-
+/*END WALL DETAIL PAGE*/
+@media only screen and (max-width: 1400px) {
   .nav {
-    grid-column: 3 / 9;
+    grid-column: 1 / 21;
     color: white;
     font-family: 'Didact Gothic', sans-serif;
-    font-size: 1em;
+    font-size: 1.25em;
   }
 
-  .nav li {
-    padding-left: 1em;
-    padding-right: 1em;
-    text-decoration: none;
-    display: inline-block;
+  .nav-text {
+    grid-column: 1 / 21;
   }
 
-  .nav a {
-    color: white;
-    text-decoration: none;
+  #bannerContainer {
+    padding: 0.2em;
   }
   /* For mobile phones: */
   .container {
@@ -394,8 +416,73 @@ div .currentProgress p {
   }
 
   .content {
-    padding: 1em;
+    font-size: 1.25em;
+  }
+
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+
+  nav {
+    background-color: #141414;
+    grid-column: 1 / 21;
+    grid-row: 1;
+  }
+
+  .nav {
+    grid-column: 1 / 21;
+    color: white;
+    font-family: 'Didact Gothic', sans-serif;
     font-size: 1em;
+  }
+
+  .nav-text {
+    grid-column: 1 / 21;
+  }
+
+  .nav li {
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .nav a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .logo {
+    padding: 0;
+    margin: 0;
+  }
+
+  #bannerContainer {
+    padding: 0.2em;
+  }
+
+  header h1 {
+  padding: 4% 0% 0% 4%;
+  margin: 0;
+  }
+  
+  .container {
+    grid-column: 1 / 21;
+    grid-row: 2 / 11;
+  }
+
+  .content {
+    padding: 4%;
+    font-size: 1em;
+  }
+
+  .wall {
+    padding: 0;
+    margin: 0;
+    margin-bottom: 1em;
+    margin-right: 0.5em;
+    max-width: 100%;
   }
 
   .wall-header {
